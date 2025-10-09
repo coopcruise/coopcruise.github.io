@@ -152,20 +152,21 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            The proliferation of connected automated vehicles represents an unprecedented opportunity for
-            improving driving efficiency and alleviating traffic congestion. However, existing research
-            fails to address realistic multi-lane highway scenarios without assuming connectivity, perception,
-            and control capabilities that are typically unavailable in current vehicles. This paper proposes a
-            novel AI system that is the first to improve highway traffic efficiency compared with human-like
-            traffic in realistic, simulated multi-lane scenarios, while relying on existing connectivity,
-            perception, and control capabilities. At the core of our approach is a reinforcement learning
-            based controller that dynamically communicates time-headways to automated vehicles near bottlenecks
-            based on real-time traffic conditions. These desired time-headways are then used by adaptive
-            cruise control (ACC) systems to adjust their following distance. By (i) integrating existing traffic
-            estimation technology and low-bandwidth vehicle-to-infrastructure connectivity, (ii) leveraging
-            safety-certified ACC systems, and (iii) targeting localized bottleneck challenges that can be addressed
-            independently in different locations, we propose a potentially practical, safe, and scalable system
-            that can positively impact numerous road users.
+            Highway congestion remains one of the most pressing challenges in modern transportation. Connected automated vehicles (CAVs)
+            equipped with adaptive cruise control (ACC) create new opportunities for congestion mitigation. Traditional practice relies
+            on Eulerian variable speed limits (VSL), which regulate traffic through roadside signs but suffer from infrequent updates and
+            limited driver compliance. More recent research has explored Lagrangian strategies that directly influence individual vehicles,
+            but these approaches have struggled to deliver consistent improvements in realistic multi-lane highways, where unpredictable
+            lane changes undermine vehicle-level decisions. This paper introduces a reinforcement learning based Eulerian system that
+            mitigates congestion by issuing frequent control commands to ACC-equipped vehicles approaching bottlenecks. Unlike traditional
+            VSL, our system achieves reliable compliance and adapts dynamically to real-time traffic, while avoiding reliance on lane-change
+            prediction by regulating density at the aggregate level. We evaluate three variants of our system---speed-limit control,
+            time-headway control, and distance-headway control---in large-scale simulations with thousands of vehicles across a range of
+            merging flows and ACC penetration rates. Results show that headway-based variants improve traffic flow by up to 10.6% over human
+            traffic and 6.7% over traditional VSL, while speed-limit control gives smaller gains. To strengthen evaluation, we propose a
+            novel metric for average speed in simulations with dynamic vehicle entry and exit, addressing a recognized flaw in simulation
+            studies. Taken together, the system design, grounded in deployable technologies, and the empirical findings indicate that
+            Eulerian headway control of ACC-equipped vehicles opens a path toward practical, safe, and scalable congestion mitigation systems.
           </p>
         </div>
       </div>
