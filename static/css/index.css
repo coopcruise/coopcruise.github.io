@@ -8,7 +8,8 @@ body {
     color: #000;
 }
 
-.link-block a {
+.link-block a,
+.link-block button {
     margin-top: 5px;
     margin-bottom: 5px;
 }
@@ -154,4 +155,555 @@ body {
 }
 #interpolation-image-wrapper img {
   border-radius: 5px;
+}
+
+/* ==========================================================================
+   CoopCruise page styles
+   ========================================================================== */
+
+:root {
+  color-scheme: light dark;
+
+  --cc-navy: #14213d;
+  --cc-blue: #0b6ec9;
+  --cc-amber: #f7a400;
+  --cc-ink: #2b2f38;
+  --cc-line: #e2e6ee;
+  --cc-soft: #f6f8fb;
+
+  --cc-bg: #ffffff;
+  --cc-surface: #ffffff;
+  --cc-muted: #6a7180;
+  --cc-heading: var(--cc-navy);
+  --cc-nav-bg: rgba(255, 255, 255, 0.96);
+  --cc-slab: var(--cc-navy);      /* callout + pipeline blocks */
+  --cc-good: #1f9d55;
+  --cc-bad: #d64545;
+
+  /* Figures keep a light plate in both themes: much of the artwork is
+     transparent line art that is unreadable on a dark background. */
+  --cc-plate: #ffffff;
+  --cc-plate-pad: 0px;
+}
+
+@media screen and (prefers-color-scheme: dark) {
+  :root {
+    --cc-blue: #74b0f5;
+    --cc-ink: #dde2ec;
+    --cc-line: #2b3348;
+    --cc-soft: #171d2e;
+
+    --cc-bg: #0d1220;
+    --cc-surface: #141a2b;
+    --cc-muted: #98a1b5;
+    --cc-heading: #e8ecf5;
+    --cc-nav-bg: rgba(13, 18, 32, 0.94);
+    --cc-slab: #1e2740;
+    --cc-good: #4ade80;
+    --cc-bad: #f87171;
+
+    --cc-plate-pad: 10px;
+  }
+}
+
+body {
+  color: var(--cc-ink);
+  background-color: var(--cc-bg);
+}
+
+.cc-muted { color: var(--cc-muted) !important; }
+.cc-accent { color: var(--cc-amber); }
+
+/* --- Hero ---------------------------------------------------------------- */
+
+.cc-hero {
+  background:
+    linear-gradient(rgba(8, 16, 36, 0.80), rgba(8, 16, 36, 0.93)),
+    url('../images/hero-bg.jpg') center / cover no-repeat;
+  color: #fff;
+}
+
+.cc-hero .publication-title,
+.cc-hero .publication-authors,
+.cc-hero .cc-affiliations {
+  color: #fff;
+}
+
+.cc-hero .publication-title {
+  font-size: 2.35rem;
+  line-height: 1.25;
+}
+
+.cc-tagline {
+  font-family: 'Google Sans', sans-serif;
+  font-size: 1.3rem;
+  color: var(--cc-amber);
+  margin-top: 1.1rem;
+}
+
+.cc-hero .publication-authors a {
+  color: #8fc6ff !important;
+}
+
+.cc-affiliations {
+  opacity: 0.8;
+  margin-top: 0.4rem;
+}
+
+/* Placeholder for a link that is not live yet. Bulma dims disabled buttons to
+   50%, which is too faint to read against the dark hero. */
+.cc-button-soon[disabled] {
+  opacity: 0.62;
+  cursor: default;
+}
+
+.cc-hero-logos {
+  margin-top: 2.2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.75rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.cc-hero-logos img {
+  height: 30px;
+  width: auto;
+  filter: brightness(0) invert(1);
+  opacity: 0.85;
+}
+
+@media screen and (max-width: 768px) {
+  .cc-hero .publication-title { font-size: 1.6rem; }
+  .cc-tagline { font-size: 1.05rem; }
+  .cc-hero-logos img { height: 22px; }
+}
+
+/* --- Sticky section nav (scrolls sideways on narrow screens, no JS) ------- */
+
+.cc-nav {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: var(--cc-nav-bg);
+  backdrop-filter: saturate(180%) blur(8px);
+  border-bottom: 1px solid var(--cc-line);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.cc-nav::-webkit-scrollbar { display: none; }
+
+.cc-nav ul {
+  display: flex;
+  gap: 0.35rem;
+  padding: 0.6rem 1rem;
+  margin: 0;
+  list-style: none;
+  white-space: nowrap;
+  justify-content: center;
+  min-width: max-content;
+}
+
+.cc-nav a {
+  display: block;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-family: 'Google Sans', sans-serif;
+  color: var(--cc-ink);
+  text-decoration: none;
+}
+
+.cc-nav a:hover {
+  background: var(--cc-soft);
+  color: var(--cc-blue);
+}
+
+/* Keep anchored headings clear of the sticky bar */
+.cc-section { scroll-margin-top: 4rem; }
+.cc-section + .cc-section { padding-top: 0; }
+
+.cc-section .title.is-3 {
+  font-family: 'Google Sans', sans-serif;
+  margin-bottom: 0.4rem;
+}
+
+.cc-kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--cc-blue);
+  margin-bottom: 0.35rem;
+}
+
+.cc-lead {
+  font-size: 1.08rem;
+  margin-bottom: 1.6rem;
+}
+
+/* --- Figures ------------------------------------------------------------- */
+
+.cc-figure {
+  margin: 0 0 1.25rem 0;
+}
+
+.cc-figure img,
+.cc-figure video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid var(--cc-line);
+  background: var(--cc-plate);
+  padding: var(--cc-plate-pad);
+  box-sizing: border-box;
+}
+
+.cc-figure.is-plain img {
+  border: none;
+}
+
+.cc-figure figcaption {
+  font-size: 0.85rem;
+  color: var(--cc-muted);
+  margin-top: 0.55rem;
+  line-height: 1.45;
+}
+
+.cc-figure figcaption b {
+  color: var(--cc-ink);
+}
+
+/* Detail-dense wide figures: pan sideways rather than shrink below legibility */
+.cc-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.cc-swipe-hint { display: none; }
+
+@media screen and (max-width: 768px) {
+  .cc-scroll img { min-width: 620px; }
+  .cc-swipe-hint {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--cc-muted);
+    font-style: italic;
+    margin-top: 0.4rem;
+  }
+  /* Justified text produces word-spacing rivers in narrow columns */
+  .has-text-justified { text-align: left !important; }
+}
+
+.cc-portrait {
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* --- Cards --------------------------------------------------------------- */
+
+/* Full height so cards in a row line up — but only when the card owns the
+   column. Otherwise 100% is measured against the whole column and the card
+   overflows past the content that precedes it. */
+.column > .cc-card:not(:only-child) {
+  height: auto;
+}
+
+.cc-card {
+  height: 100%;
+  background: var(--cc-surface);
+  border: 1px solid var(--cc-line);
+  border-radius: 10px;
+  padding: 1.25rem 1.35rem;
+}
+
+.cc-card h4 {
+  font-family: 'Google Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.02rem;
+  margin-bottom: 0.4rem;
+  color: var(--cc-heading);
+}
+
+.cc-card p,
+.cc-card li {
+  font-size: 0.93rem;
+  line-height: 1.5;
+}
+
+.cc-card ul {
+  margin-top: 0.3rem;
+  margin-left: 1.05rem;
+  list-style: disc;
+}
+
+.cc-card.is-soft { background: var(--cc-soft); }
+
+.cc-card.is-accent {
+  border-color: var(--cc-blue);
+  border-width: 2px;
+}
+
+.cc-step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 50%;
+  background: var(--cc-blue);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 0.6rem;
+}
+
+.cc-card.is-soft .cc-step-num { background: var(--cc-slab); }
+
+/* Pros / cons markers inside comparison cards */
+.cc-list { list-style: none !important; margin-left: 0 !important; }
+.cc-list li { padding-left: 1.5rem; position: relative; margin-bottom: 0.3rem; }
+.cc-list li::before {
+  position: absolute;
+  left: 0;
+  font-weight: 700;
+}
+.cc-list li.good::before { content: '\002B'; color: var(--cc-good); }
+.cc-list li.bad::before  { content: '\2212'; color: var(--cc-bad); }
+
+/* --- Stats --------------------------------------------------------------- */
+
+.cc-stat {
+  text-align: center;
+  padding: 1.1rem 0.75rem;
+  border-radius: 10px;
+  background: var(--cc-soft);
+  border: 1px solid var(--cc-line);
+  height: 100%;
+}
+
+.cc-stat .num {
+  display: block;
+  font-family: 'Google Sans', sans-serif;
+  font-size: 2.1rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--cc-heading);
+  white-space: nowrap;
+}
+
+.cc-stat.is-headline .num { color: var(--cc-blue); }
+
+.cc-stat .lbl {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--cc-muted);
+  margin-top: 0.3rem;
+  line-height: 1.35;
+}
+
+@media screen and (max-width: 768px) {
+  .cc-stat .num { font-size: 1.7rem; }
+}
+
+/* Scale each figure to the width of its own box. The evaluation row packs
+   four stats into a narrow column, where long values like "~1,000" overflow
+   at the full size, while the three-across results row has room to spare. */
+@supports (font-size: 1cqi) {
+  .cc-stat {
+    container-type: inline-size;
+  }
+
+  .cc-stat .num {
+    font-size: clamp(1rem, 27cqi, 2.1rem);
+  }
+}
+
+/* --- Pipeline strip ------------------------------------------------------ */
+
+.cc-pipeline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0.6rem;
+  margin: 1.5rem 0;
+}
+
+.cc-pipeline .stage {
+  flex: 1 1 200px;
+  background: var(--cc-slab);
+  color: #fff;
+  border-radius: 8px;
+  padding: 0.9rem 1rem;
+  text-align: center;
+  font-family: 'Google Sans', sans-serif;
+  font-size: 0.95rem;
+}
+
+.cc-pipeline .arrow {
+  align-self: center;
+  color: var(--cc-blue);
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+@media screen and (max-width: 768px) {
+  .cc-pipeline .arrow { transform: rotate(90deg); }
+}
+
+/* --- Equations ----------------------------------------------------------- */
+
+.cc-eq {
+  background: var(--cc-soft);
+  border: 1px solid var(--cc-line);
+  border-left: 3px solid var(--cc-blue);
+  border-radius: 8px;
+  padding: 0.85rem 1.1rem;
+  margin: 1.1rem 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.cc-eq .where {
+  font-size: 0.83rem;
+  color: #6a7180;
+  margin-top: 0.4rem;
+}
+
+/* --- Callout ------------------------------------------------------------- */
+
+.cc-callout {
+  background: var(--cc-slab);
+  color: #fff;
+  border-radius: 10px;
+  padding: 1.4rem 1.6rem;
+  font-family: 'Google Sans', sans-serif;
+  font-size: 1.1rem;
+  text-align: center;
+  margin-top: 1.75rem;
+}
+
+.cc-note {
+  font-size: 0.88rem;
+  color: var(--cc-muted);
+  border-left: 3px solid var(--cc-line);
+  padding-left: 0.9rem;
+  margin-top: 1.25rem;
+}
+
+/* --- Missing-asset placeholder ------------------------------------------- */
+
+.cc-placeholder {
+  border: 2px dashed #c2c9d6;
+  border-radius: 8px;
+  background: var(--cc-soft);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  color: var(--cc-muted);
+  font-size: 0.9rem;
+}
+
+.cc-placeholder code {
+  background: var(--cc-surface);
+  font-size: 0.85rem;
+}
+
+/* --- BibTeX -------------------------------------------------------------- */
+
+#BibTeX pre {
+  background: var(--cc-soft);
+  border: 1px solid var(--cc-line);
+  border-radius: 8px;
+  overflow-x: auto;
+  color: var(--cc-ink);
+}
+
+/* ==========================================================================
+   Dark theme — overrides Bulma's light defaults.
+   Declaring color-scheme above also stops Chrome/Samsung force-dark from
+   applying its own inversion, which mangles transparent figure artwork.
+   ========================================================================== */
+
+@media screen and (prefers-color-scheme: dark) {
+
+  html,
+  body {
+    background-color: var(--cc-bg);
+    color: var(--cc-ink);
+  }
+
+  .title,
+  .subtitle,
+  .content h1, .content h2, .content h3, .content h4,
+  .content strong,
+  strong {
+    color: var(--cc-heading);
+  }
+
+  .content,
+  .content p,
+  .content li {
+    color: var(--cc-ink);
+  }
+
+  .section,
+  .hero:not(.cc-hero) {
+    background-color: transparent;
+  }
+
+  .footer {
+    background-color: var(--cc-soft);
+    color: var(--cc-muted);
+  }
+
+  .footer .content p {
+    color: var(--cc-muted);
+  }
+
+  pre,
+  code {
+    background-color: var(--cc-soft);
+    color: var(--cc-ink);
+  }
+
+  a:not(.button) {
+    color: var(--cc-blue);
+  }
+
+  .cc-nav {
+    border-bottom-color: var(--cc-line);
+  }
+
+  .cc-nav a:hover {
+    background: var(--cc-surface);
+  }
+
+  /* Slab blocks need a visible edge once the page itself is dark */
+  .cc-callout,
+  .cc-pipeline .stage {
+    border: 1px solid var(--cc-line);
+  }
+
+  .cc-placeholder {
+    border-color: var(--cc-line);
+  }
+
+  /* The SUMO mark sits outside .cc-figure, so give it its own plate */
+  .cc-card img {
+    background: var(--cc-plate);
+    border-radius: 4px;
+    padding: 4px 6px;
+    box-sizing: content-box;
+  }
+
+  /* Buttons in the hero stay as-is; the hero is dark in both themes */
+  .button.is-dark {
+    background-color: #2b3348;
+    color: #fff;
+  }
 }

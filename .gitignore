@@ -1,2 +1,5 @@
 .DS_store
 .idea
+
+# Source presentation — too large for a Pages repo, keep it out of git history
+*.pptx

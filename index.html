@@ -1,12 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="description"
-        content="Reinforcement Learning-Based Time-Headway Control for Increased Traffic Efficiency">
-  <meta name="keywords" content="Time-headway control, traffic congestion, reinforcement learning">
+        content="Highway Congestion Reduction through RL-Based Eulerian Headway Control: an RL controller that broadcasts time-headway commands to connected ACC vehicles near highway bottlenecks.">
+  <meta name="keywords" content="Time-headway control, traffic congestion, reinforcement learning, connected automated vehicles, adaptive cruise control, variable speed limit">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Cooperative Cruising: Reinforcement Learning-Based Time-Headway Control for Increased Traffic Efficiency</title>
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0d1220" media="(prefers-color-scheme: dark)">
+  <title>Highway Congestion Reduction through RL-Based Eulerian Headway Control</title>
+
+  <meta property="og:title" content="Highway Congestion Reduction through RL-Based Eulerian Headway Control">
+  <meta property="og:description" content="Control density through headway, not speed. An RL controller broadcasts time-headway commands to connected ACC vehicles near highway bottlenecks.">
+  <meta property="og:image" content="https://coopcruise.github.io/static/images/system-diagram.png">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
@@ -34,6 +43,14 @@
   <link rel="stylesheet" href="static/css/index.css">
 <!--   <link rel="icon" href="./static/images/icon.svg"> -->
 
+  <script>
+    window.MathJax = {
+      tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]},
+      svg: {fontCache: 'global'}
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script defer src="static/js/fontawesome.all.min.js"></script>
   <script src="static/js/bulma-carousel.min.js"></script>
@@ -42,36 +59,34 @@
 </head>
 <body>
 
-<section class="hero">
+<!-- ======================================================================
+     Hero
+     ====================================================================== -->
+<section class="hero cc-hero">
   <div class="hero-body">
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">Cooperative Cruising: Reinforcement Learning-Based Time-Headway Control for Increased Traffic Efficiency</h1>
-<!--           <div class="is-size-5 publication-authors"> -->
-<!--             <span class="author-block">
-              <a href="link1">Author 1</a><sup>1</sup>,</span>
-            <span class="author-block">
-              <a href="link2">Author 2</a><sup>1</sup>,</span> -->
-<!--             <span class="author-block">
-              <a href="link3">Author 3</a><sup>2</sup>,
-            </span> -->
-<!--             <span class="author-block">
-              <a href="link4">Author 4</a><sup>2</sup>,
-            </span> -->
-<!--             <span class="author-block">
-              <a href="link5">Author 5</a><sup>1</sup>,
-            </span> -->
-<!--           </div> -->
 
-<!--           <div class="is-size-5 publication-authors">
-            <span class="author-block"><sup>1</sup>Affiliation 1</span>
-            <span class="author-block"><sup>2</sup>Affiliation 2</span>
-          </div> -->
+          <h1 class="title is-1 publication-title">Highway Congestion Reduction through RL-Based Eulerian Headway Control</h1>
+          <p class="cc-tagline">Control density through headway, not speed.</p>
+
+          <div class="is-size-5 publication-authors" style="margin-top: 1.75rem;">
+            <span class="author-block">Yaron Veksler<sup>1</sup>,</span>
+            <span class="author-block">Sharon Hornstein<sup>1</sup>,</span>
+            <span class="author-block">Han Wang<sup>2</sup>,</span>
+            <span class="author-block">Maria Laura Delle Monache<sup>2</sup>,</span>
+            <span class="author-block">Daniel Urieli<sup>1</sup></span>
+          </div>
+
+          <div class="is-size-6 cc-affiliations">
+            <span class="author-block"><sup>1</sup>General Motors R&amp;D Labs</span>
+            <span class="author-block" style="margin-left: 1rem;"><sup>2</sup>University of California, Berkeley</span>
+          </div>
 
           <div class="column has-text-centered">
             <div class="publication-links">
-              <!-- PDF Link. -->
+              <!-- PDF Link. Add once the ITSC 2026 proceedings version is published. -->
 <!--               <span class="link-block">
                 <a href="pdf_url"
                    class="external-link button is-normal is-rounded is-dark">
@@ -80,16 +95,17 @@
                   </span>
                   <span>Paper</span>
                 </a>
-              </span>
+              </span> -->
+              <!-- arXiv Link. -->
               <span class="link-block">
-                <a href="arxiv_url"
+                <a href="https://arxiv.org/abs/2412.02520"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="ai ai-arxiv"></i>
                   </span>
                   <span>arXiv</span>
                 </a>
-              </span> -->
+              </span>
               <!-- Video Link. -->
 <!--               <span class="link-block">
                 <a href="video_url"
@@ -100,15 +116,16 @@
                   <span>Video</span>
                 </a>
               </span> -->
-              <!-- Code Link. -->
+              <!-- Code Link. Disabled until the repository is updated for this
+                   version of the paper; then restore the href below.
+                   https://github.com/coopcruise/coopcruise -->
               <span class="link-block">
-                <a href="https://github.com/coopcruise/coopcruise"
-                   class="external-link button is-normal is-rounded is-dark">
+                <button class="button is-normal is-rounded is-dark cc-button-soon" disabled>
                   <span class="icon">
                       <i class="fab fa-github"></i>
                   </span>
-                  <span>Code</span>
-                  </a>
+                  <span>Code (soon)</span>
+                </button>
               </span>
               <!-- Dataset Link. -->
 <!--               <span class="link-block">
@@ -121,32 +138,60 @@
                   </a>
               </span> -->
             </div>
-
           </div>
+
+          <div class="cc-hero-logos">
+            <img src="static/images/logo-gmrd.png" alt="GM Research &amp; Development">
+            <img src="static/images/logo-bair.png" alt="Berkeley Artificial Intelligence Research">
+          </div>
+
         </div>
       </div>
     </div>
   </div>
 </section>
 
+<!-- ======================================================================
+     Sticky section nav — scrolls sideways on narrow screens, no JS needed
+     ====================================================================== -->
+<nav class="cc-nav" aria-label="Section navigation">
+  <ul>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#background">Background</a></li>
+    <li><a href="#problem">The problem</a></li>
+    <li><a href="#approach">Why headway</a></li>
+    <li><a href="#system">System</a></li>
+    <li><a href="#method">RL formulation</a></li>
+    <li><a href="#evaluation">Evaluation</a></li>
+    <li><a href="#results">Results</a></li>
+    <li><a href="#summary">Summary</a></li>
+  </ul>
+</nav>
+
+<!-- ======================================================================
+     Teaser
+     ====================================================================== -->
 <section class="hero teaser">
   <div class="container is-max-desktop">
     <div class="hero-body">
-      <video id="teaser" autoplay muted loop playsinline height="100%">
-        <!--TODO: change video link-->
-        <source src="static/videos/multilane_av_100.mp4"
-                type="video/mp4">
-      </video>
+      <div class="cc-figure cc-portrait">
+        <video id="teaser" autoplay muted loop playsinline poster="static/images/video-poster.jpg">
+          <source src="static/videos/human-vs-rl.mp4" type="video/mp4">
+        </video>
+      </div>
       <h2 class="subtitle has-text-centered">
-        Time-headway control can improve flow of high-density highway traffic.
+        The same merge bottleneck with human-only traffic (top) and with 100% connected-ACC
+        vehicles under RL headway control (bottom).
       </h2>
     </div>
   </div>
 </section>
 
-<section class="section">
+<!-- ======================================================================
+     Abstract
+     ====================================================================== -->
+<section class="section cc-section" id="abstract">
   <div class="container is-max-desktop">
-    <!-- Abstract. -->
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
         <h2 class="title is-3">Abstract</h2>
@@ -170,34 +215,734 @@
         </div>
       </div>
     </div>
-    <!--/ Abstract. -->
 
-    <!-- Paper video. -->
-<!--     <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Video</h2>
-        <div class="publication-video">
-          <iframe src="youtube_url;showinfo=0"
-                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <div class="columns is-centered" style="margin-top: 1rem;">
+      <div class="column is-6">
+        <div class="cc-card is-accent">
+          <span class="cc-step-num">1</span>
+          <h4>Control traffic density through headway</h4>
+          <p>
+            Headway commands set vehicle spacing directly, which makes density — not speed — the
+            quantity the controller actually regulates.
+          </p>
         </div>
       </div>
-    </div> -->
-    <!--/ Paper video. -->
+      <div class="column is-6">
+        <div class="cc-card is-accent">
+          <span class="cc-step-num">2</span>
+          <h4>Designed for practical deployment</h4>
+          <p>
+            Built on technologies that already exist: production ACC, standard traffic sensing, and
+            low-bandwidth cellular broadcast.
+          </p>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
-<section class="section" id="BibTeX">
+<!-- ======================================================================
+     Background
+     ====================================================================== -->
+<section class="section cc-section" id="background">
+  <div class="container is-max-desktop">
+    <p class="cc-kicker">Background</p>
+    <h2 class="title is-3">From simulation to the open road</h2>
+    <p class="cc-lead">
+      This work continues a line of research on using connected automated vehicles (CAVs) to improve
+      highway flow in mixed traffic. CAV-based coordination has been demonstrated in real-world trials,
+      but has not yet achieved widespread commercial deployment.
+    </p>
+
+    <div class="columns">
+      <div class="column is-4">
+        <div class="cc-card is-soft">
+          <h4>Flow (2018)</h4>
+          <p>
+            Cathy Wu, Alex Bayen et al. introduced a framework for applying deep reinforcement learning
+            to mixed-autonomy traffic control.
+          </p>
+        </div>
+      </div>
+      <div class="column is-4">
+        <div class="cc-card is-soft">
+          <h4>Distributed control (2021)</h4>
+          <p>
+            Jiaxun Cui, Peter Stone et al., together with our team at GM Research, developed distributed
+            in-vehicle control algorithms on top of that framework.
+          </p>
+        </div>
+      </div>
+      <div class="column is-4">
+        <div class="cc-card is-soft">
+          <h4>CIRCLES &amp; the MegaVanderTest (2022)</h4>
+          <p>
+            A multi-institution effort that took the idea out of simulation and onto a live highway.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="columns" style="margin-top: 1.5rem;">
+      <div class="column is-6">
+        <figure class="cc-figure">
+          <video autoplay muted loop playsinline preload="metadata">
+            <source src="static/videos/prior-merge-human.mp4" type="video/mp4">
+          </video>
+          <figcaption><b>Human-driven baseline</b> from the distributed-control line of work.</figcaption>
+        </figure>
+      </div>
+      <div class="column is-6">
+        <figure class="cc-figure">
+          <video autoplay muted loop playsinline preload="metadata">
+            <source src="static/videos/prior-merge-outflow.mp4" type="video/mp4">
+          </video>
+          <figcaption><b>Controlled outflow</b> under distributed in-vehicle control.</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <h3 class="title is-4" style="margin-top: 2.5rem;">CIRCLES: coordinating CAVs to smooth real-world traffic</h3>
+
+    <div class="columns is-vcentered">
+      <div class="column is-7">
+        <div class="content">
+          <p>
+            The vision of CIRCLES was to take the Flow idea out of simulation and into the real world.
+            Over several years, a team headed by Alex Bayen at UC Berkeley — spanning academic institutions,
+            government agencies, and industry partners including GM Research — prepared a large-scale,
+            five-day experiment on I-24 in Tennessee.
+          </p>
+          <p>
+            The <b>MegaVanderTest</b> was the final open-road test of the project: 100 automated vehicles
+            sent onto I-24 during the morning peak, and one of the largest coordinated open-road
+            traffic-smoothing experiments conducted to date. Analysis found an 8% reduction in average
+            traffic density, and a 52% reduction during congestion formation.
+          </p>
+          <p>
+            It was also expensive — millions of dollars — and ran under stochastic real-world conditions,
+            which makes it hard to reproduce in a controlled manner. This paper takes the lessons from the
+            MegaVanderTest, proposes a new practical control paradigm, and analyzes it in controlled experiments.
+          </p>
+          <p class="is-size-7 cc-muted">
+            [Lee et al., IEEE Control Systems 2025] &middot; [Wang et al., IEEE Control Systems 2025]
+          </p>
+        </div>
+      </div>
+      <div class="column is-5">
+        <figure class="cc-figure">
+          <img src="static/images/i24-overview.jpg"
+               alt="Map of the Nashville area showing the I-24 test road and the target bottleneck">
+          <figcaption>The I-24 test road southeast of Nashville, with the target bottleneck marked.</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <figure class="cc-figure">
+      <img src="static/images/mvt-fleet.jpg"
+           alt="A row of numbered white and dark SUVs staged in a parking lot for the MegaVanderTest">
+      <figcaption>Part of the 100-vehicle fleet staged for the MegaVanderTest.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ======================================================================
+     The problem
+     ====================================================================== -->
+<section class="section cc-section" id="problem">
+  <div class="container is-max-desktop">
+    <p class="cc-kicker">The problem</p>
+    <h2 class="title is-3">A local merge can trigger a network-wide breakdown</h2>
+    <p class="cc-lead">
+      We focus on a high-demand weaving area between Exit 60 and Exit 59 on I-24 westbound — a well-known,
+      recurrent bottleneck during the morning peak. Merging traffic induces slow-downs, lane changes, and
+      stop-and-go waves that reduce flow and increase energy consumption.
+    </p>
+
+    <div class="columns">
+      <div class="column is-6">
+        <figure class="cc-figure">
+          <img src="static/images/bottleneck-map.jpg"
+               alt="Aerial view of I-24 westbound between Exit 60 and Exit 59">
+          <figcaption>
+            <b>Target bottleneck.</b> The high-demand weaving area between Exit 60 and Exit 59 on
+            I-24 westbound, Tennessee.
+          </figcaption>
+        </figure>
+      </div>
+      <div class="column is-6">
+        <figure class="cc-figure">
+          <img src="static/images/inrix-heatmap.png"
+               alt="Velocity contour heatmap of I-24 westbound showing a standing bottleneck at Exit 59">
+          <figcaption>
+            <b>Average-speed profile</b> on the test segment. Red indicates higher density and lower speed.
+            A standing bottleneck forms at Exit 59, from which a queue builds and sends shockwaves upstream.
+            Based on data provided by INRIX, Inc.
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <figure class="cc-figure is-plain" style="margin-top: 1.5rem;">
+      <img src="static/images/merge-breakdown.jpg"
+           alt="Illustration of a four-lane highway where an on-ramp merge creates a density spike and an upstream stop-and-go wave">
+      <figcaption>
+        On a congested multi-lane road, a single on-ramp merge is enough to seed congestion. Merging
+        vehicles create a <b>density spike</b> at the bottleneck, which triggers <b>lane changes</b>, which
+        produce a <b>stop-and-go wave</b> that propagates upstream.
+      </figcaption>
+    </figure>
+
+    <div class="cc-note">
+      Increasing headway helps when the location and timing of lane changes are predictable. In multi-lane
+      bottlenecks they are not — they depend on hidden driver intentions.
+    </div>
+
+    <h3 class="title is-4" style="margin-top: 3rem;">Vehicle-level decisions require access to other drivers' hidden intentions</h3>
+
+    <div class="columns is-vcentered">
+      <div class="column is-7">
+        <figure class="cc-figure is-plain">
+          <div class="cc-scroll">
+            <img src="static/images/intention-dilemma.svg"
+                 alt="Diagram contrasting no preemptive headway increase with preemptive headway increase, and the four possible outcomes depending on whether a cut-in occurs">
+          </div>
+          <p class="cc-swipe-hint">Swipe sideways to see the full figure.</p>
+        </figure>
+      </div>
+      <div class="column is-5">
+        <div class="content">
+          <p>
+            This is the core <b>chicken-and-egg dilemma</b> at the vehicle level. Increasing a vehicle's
+            headway helps only if a neighbour actually cuts in from the congested lane. If no cut-in
+            happens, the enlarged gap is wasted capacity and flow drops.
+          </p>
+          <p>
+            Choosing the right action therefore depends on predicting the <b>counterfactual behaviour</b> of
+            other drivers, which makes purely in-vehicle, distributed control very challenging.
+          </p>
+        </div>
+        <div class="cc-card is-accent">
+          <p style="font-family: 'Google Sans', sans-serif;">
+            A robust action would require predicting counterfactual driver behaviour
+            &rarr; which motivates <b>density regulation</b> instead.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================================
+     Why headway
+     ====================================================================== -->
+<section class="section cc-section" id="approach">
+  <div class="container is-max-desktop">
+    <p class="cc-kicker">Our claim</p>
+    <h2 class="title is-3">Connectivity and automation can be better utilised</h2>
+    <p class="cc-lead">
+      Existing and recently proposed systems each give up something. Our goal is a controller that is
+      responsive, compliant, and intention-agnostic all at once.
+    </p>
+
+    <div class="columns">
+      <div class="column is-6">
+        <div class="cc-card">
+          <p class="cc-kicker">Existing systems</p>
+          <h4>Eulerian variable speed limits</h4>
+          <p class="cc-muted" style="margin-bottom: 0.6rem;">Roadside signs &middot; aggregate control</p>
+          <ul class="cc-list">
+            <li class="bad">Low responsiveness — signs update only a few times per hour</li>
+            <li class="bad">Inconsistent human compliance</li>
+            <li class="good">Does not depend on intention prediction</li>
+          </ul>
+          <p class="is-size-7 cc-muted" style="margin-top: 0.8rem;">
+            [Papageorgiou 2023, Hegyi 2005, Han 2017]
+          </p>
+        </div>
+      </div>
+      <div class="column is-6">
+        <div class="cc-card">
+          <p class="cc-kicker">Recently proposed systems</p>
+          <h4>Lagrangian vehicle control</h4>
+          <p class="cc-muted" style="margin-bottom: 0.6rem;">Direct vehicle actuation</p>
+          <ul class="cc-list">
+            <li class="good">High responsiveness</li>
+            <li class="good">High compliance</li>
+            <li class="bad">Depends on latent lane-change intentions in multi-lane traffic</li>
+          </ul>
+          <p class="is-size-7 cc-muted" style="margin-top: 0.8rem;">
+            [Vinitsky et al. 2023, Cui et al. 2021, Zhang et al. 2023]
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="cc-callout">
+      Design target: responsive <span class="cc-accent">+</span> compliant
+      <span class="cc-accent">+</span> intention-agnostic
+    </div>
+
+    <h3 class="title is-4" style="margin-top: 3rem;">Headway regulates density more directly than speed</h3>
+    <p class="cc-lead">
+      To dodge the intention-prediction problem we go back to the aggregate level and regulate traffic
+      density. Since headway regulates density more directly than speed does, headway is the natural
+      Eulerian control variable.
+    </p>
+
+    <div class="columns">
+      <div class="column is-7">
+        <div id="fig-headway-wrap">
+          <figure class="cc-figure is-plain">
+            <div class="cc-scroll">
+              <img src="static/images/headway-vs-speed.png"
+                   alt="Time-space diagrams comparing a constant speed limit against a constant time-headway command, showing average speed and density">
+            </div>
+            <figcaption>
+              <b>Constant speed limit vs. constant time-headway</b>, applied for identical durations.
+              Top pair: average speed (green is fast, yellow/red is slow). Bottom pair: density
+              (green is sparse, yellow/red is dense). White dotted markers show the control duration
+              and the resulting low-density duration downstream.
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+      <div class="column is-5">
+        <div class="content">
+          <p>
+            Time-headway commands set vehicle spacing directly, sustaining a low-density region for the
+            <b>entire</b> control duration.
+          </p>
+          <p>
+            With speed commands, low density is preserved only briefly. Generating and maintaining the same
+            effect for longer requires carefully shaping the speed signal over time, in a complex and
+            indirect manner.
+          </p>
+          <p>
+            This structural simplicity is what motivates headway as the Eulerian control variable.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================================
+     System
+     ====================================================================== -->
+<section class="section cc-section" id="system">
+  <div class="container is-max-desktop">
+    <p class="cc-kicker">Proposed system</p>
+    <h2 class="title is-3">Sense the segment, infer a headway, broadcast it</h2>
+
+    <div class="columns is-vcentered">
+      <div class="column is-6">
+        <figure class="cc-figure is-plain">
+          <img src="static/images/system-diagram.png"
+               alt="Diagram of the analysed scenario: an RL controller receives road-segment measurements and sends headway commands to connected ACC vehicles near the bottleneck">
+          <figcaption>
+            <b>Eulerian RL-based headway control.</b> (a) The analysed scenario — an RL controller sends
+            commands to connected-ACC vehicles near the bottleneck based on road-segment measurements.
+            (b) The two command types.
+          </figcaption>
+        </figure>
+      </div>
+      <div class="column is-6">
+        <div class="columns is-multiline">
+          <div class="column is-6">
+            <div class="cc-card is-soft">
+              <span class="cc-step-num">1</span>
+              <h4>Sense</h4>
+              <p>Segment speed and density around the bottleneck.</p>
+            </div>
+          </div>
+          <div class="column is-6">
+            <div class="cc-card is-soft">
+              <span class="cc-step-num">2</span>
+              <h4>Infer</h4>
+              <p>An RL policy maps that aggregate state to continuous headway actions.</p>
+            </div>
+          </div>
+          <div class="column is-6">
+            <div class="cc-card is-soft">
+              <span class="cc-step-num">3</span>
+              <h4>Broadcast</h4>
+              <p>Actions go out to connected ACC vehicles in the controlled segments.</p>
+            </div>
+          </div>
+          <div class="column is-6">
+            <div class="cc-card is-soft">
+              <span class="cc-step-num">4</span>
+              <h4>Actuate</h4>
+              <p>ACC adjusts headway within its existing safeguards.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+      <p>
+        The policy is <b>Eulerian</b>: decisions are made for fixed road segments around the bottleneck,
+        never for an individual vehicle. There are two command types — time headway (1.5–6 s) and distance
+        headway (0–30 m) — and commands refresh every 2.5 seconds. The low-level actuation is Lagrangian in
+        effect, since moving ACC vehicles execute the command, but the decision never depends on any
+        individual driver's intention.
+      </p>
+    </div>
+
+    <div class="cc-note">
+      Safety is assumed to be enforced by production ACC. Commands are constrained to conservative ranges,
+      and we do not claim new safety guarantees.
+    </div>
+
+    <h3 class="title is-4" style="margin-top: 3rem;">Practical by design: it runs on the ACC you already have</h3>
+
+    <div class="columns is-vcentered">
+      <div class="column is-8">
+        <div class="columns is-multiline">
+          <div class="column is-6">
+            <div class="cc-card">
+              <span class="cc-step-num">1</span>
+              <h4>Adaptive cruise control integration</h4>
+              <p>Hooks directly into ACC, adjusting a single headway parameter.</p>
+            </div>
+          </div>
+          <div class="column is-6">
+            <div class="cc-card">
+              <span class="cc-step-num">2</span>
+              <h4>Existing sensors &amp; communication</h4>
+              <p>An I-24 MOTION-like sensing system plus low-bandwidth cellular communication.</p>
+            </div>
+          </div>
+          <div class="column is-6">
+            <div class="cc-card">
+              <span class="cc-step-num">3</span>
+              <h4>Practical &amp; scalable deployment</h4>
+              <p>One headway command per segment, deployable independently at each location.</p>
+            </div>
+          </div>
+          <div class="column is-6">
+            <div class="cc-card">
+              <span class="cc-step-num">4</span>
+              <h4>Built-in ACC safeguards</h4>
+              <p>Headway commands are restricted to ACC-allowed ranges.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="column is-4">
+        <figure class="cc-figure">
+          <img src="static/images/acc-interface.png"
+               alt="In-vehicle ACC controls on the steering wheel and the corresponding instrument-cluster display">
+          <figcaption>
+            The in-vehicle ACC interface used in CIRCLES, where the headway setting is adjusted on the fly.
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div class="content">
+      <p>
+        Because ACC is already standard equipment, no LiDAR arrays or specialised sensors are needed — the
+        test vehicles are essentially production cars. On the infrastructure side we rely on standard traffic
+        sensors for speed and density, plus a simple low-bandwidth broadcast of the desired headway to
+        vehicles near the bottleneck. That is a far lighter requirement than micromanaging every car's speed,
+        acceleration, or lane changes. And because only one headway command is sent per road segment, the
+        approach scales as more automated vehicles join the flow: the same broadcast covers them all, with no
+        extra retrofits and no additional roadside installations.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================================
+     RL formulation
+     ====================================================================== -->
+<section class="section cc-section" id="method">
+  <div class="container is-max-desktop">
+    <p class="cc-kicker">Method</p>
+    <h2 class="title is-3">RL learns headway commands from segment-level traffic fields</h2>
+    <p class="cc-lead">
+      We frame control as a Markov decision process and solve it with reinforcement learning.
+    </p>
+
+    <div class="columns is-multiline">
+      <div class="column is-6">
+        <div class="cc-card is-soft">
+          <p class="cc-kicker">State</p>
+          <p>
+            Average speed and density across the upstream, bottleneck, on-ramp, and downstream segments.
+          </p>
+        </div>
+      </div>
+      <div class="column is-6">
+        <div class="cc-card is-soft">
+          <p class="cc-kicker">Action</p>
+          <p>
+            Two continuous headway commands for the segments immediately upstream of the bottleneck.
+          </p>
+        </div>
+      </div>
+      <div class="column is-6">
+        <div class="cc-card is-soft">
+          <p class="cc-kicker">Transition</p>
+          <p>
+            SUMO microscopic traffic dynamics with IDM car-following.
+          </p>
+          <img src="static/images/sumo-logo.svg" alt="SUMO — Simulation of Urban Mobility"
+               style="height: 26px; width: auto; margin-top: 0.7rem;">
+        </div>
+      </div>
+      <div class="column is-6">
+        <div class="cc-card is-soft">
+          <p class="cc-kicker">Reward</p>
+          <p>
+            An immediate proxy for delay relative to free flow, with delayed entries counted as zero speed.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="cc-eq">
+      \[ r_t \;=\; \frac{1}{C}\sum_{i=1}^{N_t}\left(\frac{v_t^{(i)} - v_{\text{free}}\!\left(x_t^{(i)}\right)}{v_{\text{free}}\!\left(x_t^{(i)}\right)}\right)\Delta t \]
+      <p class="where">
+        where \(N_t\) is the number of vehicles planned to enter the simulation by time \(t\);
+        \(x_t^{(i)}\) and \(v_t^{(i)}\) are the position and speed of vehicle \(i\);
+        \(v_{\text{free}}(x)\) is the local speed limit; \(\Delta t\) is the simulation time step (0.5 s);
+        and \(C\) is a numerical normalisation constant.
+      </p>
+    </div>
+
+    <div class="content">
+      <p>
+        <b>Training.</b> Policies are trained with PPO (and SAC) via RLlib in simulation, randomising which
+        vehicles are connected in each episode.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================================
+     Evaluation
+     ====================================================================== -->
+<section class="section cc-section" id="evaluation">
+  <div class="container is-max-desktop">
+    <p class="cc-kicker">Evaluation</p>
+    <h2 class="title is-3">Evaluation setup</h2>
+
+    <div class="columns is-vcentered">
+      <div class="column is-5">
+        <figure class="cc-figure">
+          <img src="static/images/sim-area.jpg"
+               alt="Satellite view of the simulated 2 km stretch of I-24 with a single on-ramp">
+          <figcaption>
+            A simulated 2 km stretch of the I-24 merge: four lanes, one on-ramp, and two controlled
+            upstream segments.
+          </figcaption>
+        </figure>
+      </div>
+      <div class="column is-7">
+        <div class="columns is-multiline is-mobile">
+          <div class="column is-6-mobile is-3-tablet">
+            <div class="cc-stat"><span class="num">~1,000</span><span class="lbl">vehicles simulated</span></div>
+          </div>
+          <div class="column is-6-mobile is-3-tablet">
+            <div class="cc-stat"><span class="num">500 s</span><span class="lbl">episode length</span></div>
+          </div>
+          <div class="column is-6-mobile is-3-tablet">
+            <div class="cc-stat"><span class="num">30</span><span class="lbl">random seeds</span></div>
+          </div>
+          <div class="column is-6-mobile is-3-tablet">
+            <div class="cc-stat"><span class="num">95%</span><span class="lbl">confidence intervals</span></div>
+          </div>
+        </div>
+
+        <div class="columns" style="margin-top: 0.5rem;">
+          <div class="column is-6">
+            <div class="cc-card">
+              <h4>Swept conditions</h4>
+              <ul>
+                <li>Merge inflow: 7 / 14 / 30 veh/min</li>
+                <li>ACC penetration: 20% / 60% / 100%</li>
+              </ul>
+            </div>
+          </div>
+          <div class="column is-6">
+            <div class="cc-card">
+              <h4>Baselines</h4>
+              <ul>
+                <li>Human-driven traffic</li>
+                <li>Traditional VSL</li>
+                <li>Dynamic RL-based VSL</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="title is-4" style="margin-top: 3rem;">A boundary-aware metric that penalises delayed entry</h3>
+
+    <div class="columns">
+      <div class="column is-7">
+        <div class="content">
+          <p>
+            Finite-road simulations can be gamed — a previously recognised limitation
+            [Cui et al., AAMAS 2021]. A naive average-speed metric ignores the time vehicles spend waiting
+            upstream before they enter the simulation, so a controller that simply delays entry looks fast
+            while hiding the congestion it created.
+          </p>
+          <p>
+            Our boundary-aware per-vehicle speed divides the distance travelled by the time elapsed since
+            the <b>planned</b> entry time, so waiting counts as zero speed. Taking the minimum of the exit
+            time and the simulation end handles vehicles that never leave.
+          </p>
+        </div>
+        <div class="cc-card is-accent">
+          <p style="font-family: 'Google Sans', sans-serif;">
+            A controller can no longer score well merely by delaying vehicles' entry onto the simulated road.
+          </p>
+        </div>
+      </div>
+      <div class="column is-5">
+        <div class="cc-eq">
+          \[ \bar{v}^{(i)} \;=\; \frac{L^{(i)}}{\min\!\left(T_f^{(i)},\, T_{\text{sim}}\right) - T_s^{(i)}} \]
+          <p class="where">
+            where \(L^{(i)}\) is the distance travelled by vehicle \(i\) within the simulated road;
+            \(T_s^{(i)}\) its planned entry time; \(T_f^{(i)}\) its measured exit time;
+            and \(T_{\text{sim}}\) the total simulation time.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================================
+     Results
+     ====================================================================== -->
+<section class="section cc-section" id="results">
+  <div class="container is-max-desktop">
+    <p class="cc-kicker">Results</p>
+    <h2 class="title is-3">Headway control consistently outperforms speed-based baselines</h2>
+    <p class="cc-lead">
+      Maximum gains are reached at 100% connected-ACC penetration: more compliant ACC vehicles means
+      stronger density regulation, which means larger speed gains.
+    </p>
+
+    <div class="columns is-mobile is-multiline">
+      <div class="column is-12-mobile is-4-tablet">
+        <div class="cc-stat is-headline">
+          <span class="num">+10.6%</span>
+          <span class="lbl">average velocity vs. human traffic</span>
+        </div>
+      </div>
+      <div class="column is-6-mobile is-4-tablet">
+        <div class="cc-stat">
+          <span class="num">+6.7%</span>
+          <span class="lbl">vs. traditional VSL</span>
+        </div>
+      </div>
+      <div class="column is-6-mobile is-4-tablet">
+        <div class="cc-stat">
+          <span class="num">+3.4%</span>
+          <span class="lbl">vs. RL-based VSL</span>
+        </div>
+      </div>
+    </div>
+
+    <figure class="cc-figure is-plain" style="margin-top: 1.75rem;">
+      <div class="cc-scroll">
+        <img src="static/images/results.png"
+             alt="Bar charts of average velocity increase across merge inflow rates and connected-ACC penetration rates for four controllers">
+      </div>
+      <p class="cc-swipe-hint">Swipe sideways to see the full figure.</p>
+      <figcaption>
+        <b>Average-velocity improvement.</b> (a) Across merge inflow rates, at 100% penetration.
+        (b) Across connected-ACC penetration rates, at medium merge flow (14 veh/min). Error bars are
+        95% confidence intervals. Both headway variants outperform all baselines; we do not claim that
+        either headway variant is universally superior.
+      </figcaption>
+    </figure>
+
+    <div class="cc-note">
+      These are simulation results. Real-world validation is future work, and the improvement may be more
+      pronounced in more extensive simulations with longer traffic jams and merges.
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================================
+     Summary
+     ====================================================================== -->
+<section class="section cc-section" id="summary">
+  <div class="container is-max-desktop">
+    <p class="cc-kicker">Summary</p>
+    <h2 class="title is-3">Control the traffic density. Let vehicles self-organise.</h2>
+
+    <div class="cc-pipeline">
+      <div class="stage">Sense aggregate traffic</div>
+      <div class="arrow">&rarr;</div>
+      <div class="stage">Command headway</div>
+      <div class="arrow">&rarr;</div>
+      <div class="stage">Reduce bottleneck congestion</div>
+    </div>
+
+    <div class="columns" style="margin-top: 1.5rem;">
+      <div class="column is-6">
+        <div class="cc-card">
+          <h4>Contributions</h4>
+          <ul>
+            <li>Responsive Eulerian headway control</li>
+            <li>No dependence on counterfactual lane-change intentions</li>
+            <li>Uses existing connected-ACC capabilities</li>
+            <li>Deployment-facing design</li>
+          </ul>
+        </div>
+      </div>
+      <div class="column is-6">
+        <div class="cc-card">
+          <h4>Future work</h4>
+          <ul>
+            <li>Calibrate the simulation with real-world data</li>
+            <li>Validate on-road</li>
+            <li>Combine with ramp metering and dynamic lane assignment</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================================
+     BibTeX
+     ====================================================================== -->
+<section class="section cc-section" id="BibTeX">
   <div class="container is-max-desktop">
     <h2 class="title">BibTeX</h2>
-    <pre>
-<!--       <code>bibtex code
-      </code> -->
-      <p>TBD</p>
-    </pre>
+    <p class="cc-note" style="margin-bottom: 1rem;">
+      This paper is being presented at <b>IEEE ITSC 2026</b>; the proceedings version is forthcoming.
+      Until it appears, please cite the entry below — it points at the conference and carries the
+      <a href="https://arxiv.org/abs/2412.02520">arXiv preprint</a> so readers can still find the paper.
+      We will add the DOI and page numbers here once the proceedings are published.
+    </p>
+    <pre><code>@inproceedings{veksler2026highway,
+  title         = {Highway Congestion Reduction through Reinforcement Learning
+                   Based Eulerian Headway Control},
+  author        = {Veksler, Yaron and Hornstein, Sharon and Wang, Han and
+                   Delle Monache, Maria Laura and Urieli, Daniel},
+  booktitle     = {IEEE International Conference on Intelligent Transportation
+                   Systems (ITSC)},
+  year          = {2026},
+  note          = {To appear},
+  eprint        = {2412.02520},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.MA}
+}</code></pre>
   </div>
-  </section>
+</section>
 <br><br>
-
 
 <footer class="footer">
   <div class="container is-max-desktop">
