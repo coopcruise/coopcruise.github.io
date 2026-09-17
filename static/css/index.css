@@ -202,7 +202,7 @@ body {
     --cc-good: #4ade80;
     --cc-bad: #f87171;
 
-    --cc-plate-pad: 10px;
+    --cc-plate-pad: 3px;
   }
 }
 
@@ -366,6 +366,11 @@ body {
   border: none;
 }
 
+/* Opaque, dark-edged artwork needs no plate — there it reads as a white frame */
+.cc-figure.is-bleed img {
+  padding: 0;
+}
+
 .cc-figure figcaption {
   font-size: 0.85rem;
   color: var(--cc-muted);
@@ -377,23 +382,53 @@ body {
   color: var(--cc-ink);
 }
 
-/* Detail-dense wide figures: pan sideways rather than shrink below legibility */
-.cc-scroll {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+/* Shared legend for figures split into separate panels. Built in markup rather
+   than baked into the image so it stays legible and can wrap on narrow screens.
+   Swatch colours are sampled from the plot and must not shift in dark mode. */
+.cc-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem 1.3rem;
+  margin: 0.9rem 0 0;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--cc-line);
+  border-radius: 8px;
+  background: var(--cc-surface);
+  list-style: none;
+  font-size: 0.85rem;
 }
 
-.cc-swipe-hint { display: none; }
+.cc-legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  white-space: nowrap;
+}
+
+.cc-legend .sw {
+  flex: none;
+  width: 1.05rem;
+  height: 0.62rem;
+  border-radius: 2px;
+}
+
+.cc-legend .is-vsl    { background: #d51819; }
+.cc-legend .is-vsl-rl { background: #1e9b1e; }
+.cc-legend .is-th     { background: #ff7700; }
+.cc-legend .is-dh     { background: #106fb0; }
+
+/* The longest label does not fit two-per-row on a phone, and centred wrapping
+   leaves a ragged 1-2-1 block, so stack into a single column instead. */
+@media screen and (max-width: 560px) {
+  .cc-legend {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+}
 
 @media screen and (max-width: 768px) {
-  .cc-scroll img { min-width: 620px; }
-  .cc-swipe-hint {
-    display: block;
-    font-size: 0.78rem;
-    color: var(--cc-muted);
-    font-style: italic;
-    margin-top: 0.4rem;
-  }
   /* Justified text produces word-spacing rivers in narrow columns */
   .has-text-justified { text-align: left !important; }
 }
@@ -553,7 +588,22 @@ body {
 }
 
 @media screen and (max-width: 768px) {
-  .cc-pipeline .arrow { transform: rotate(90deg); }
+  /* Wrapping leaves an arrow stranded beside a stage; stack instead so each
+     arrow sits between the two stages it connects. */
+  .cc-pipeline {
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+
+  /* flex-basis is a height once the axis flips, so let stages hug their text */
+  .cc-pipeline .stage {
+    flex: 0 0 auto;
+  }
+
+  .cc-pipeline .arrow {
+    align-self: center;
+    transform: rotate(90deg);
+  }
 }
 
 /* --- Equations ----------------------------------------------------------- */
