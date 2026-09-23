@@ -261,14 +261,14 @@ body {
 
 .cc-contact-hint {
   margin-top: 0.9rem;
-  font-size: 0.8rem;
+  font-size: 1.2rem;
   letter-spacing: 0.02em;
   color: rgba(255, 255, 255, 0.55);
 }
 
 .cc-contact-hint .fa-envelope {
   margin-right: 0.35rem;
-  font-size: 0.72rem;
+  font-size: 1.2rem;
 }
 
 /* Placeholder for a link that is not live yet. Bulma dims disabled buttons to
